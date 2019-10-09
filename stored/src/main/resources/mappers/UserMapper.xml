@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace：当前XML文件用于配置哪个接口中抽象方法对应的SQL语句 -->
+<mapper namespace="cn.tedu.stored.mapper.UserMapper">
+	
+	  <resultMap type="cn.tedu.stored.Entity.User" id="UserEntityMap">
+	<id column="uid" property="uid"/>
+	<result column="username" property="username"/>
+	<result column="password" property="password"/>
+	<result column="salt" property="salt"/>
+	<result column="avatar" property="avatar"/>
+	<result column="gender" property="gender"/>
+	<result column="phone" property="phone"/>
+	<result column="email" property="email"/>
+	<result column="is_delete" property="isDelete"/>
+	<result column="create_user" property="createUser"/>
+	<result column="create_time" property="createTime"/>
+	<result column="modified_user" property="modifiedUser"/>
+	<result column="modified_time" property="modifiedTime"/>
+	</resultMap>  
+	<!-- <resultMap id="UserEntityMap" 
+		type="cn.tedu.stored.Entity.User" >
+		<id column="uid" property="uid" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="salt" property="salt" />
+		<result column="is_delete" property="isDelete" />
+		<result column="phone" property="phone" />
+		<result column="email" property="email" />	
+		<result column="gender" property="gender" />	
+		<result column="avatar" property="avatar" />	
+		<result column="created_user" property="createdUser" />	
+		<result column="created_time" property="createdTime" />	
+		<result column="modified_user" property="modifiedUser" />	
+		<result column="modified_time" property="modifiedTime" />	
+	</resultMap> -->
+	
+	
+	
+	<!--注册插入数据  -->
+	<!--Integer addnew(User user)  -->
+	<insert id="addnew" useGeneratedKeys="true" keyProperty="uid">
+	INSERT 
+	INTO t_user(
+	username,
+    password,salt,
+    is_delete,phone,
+    email,gender,
+    avatar,created_user,
+    created_time,modified_user,
+    modified_time)
+	VALUES(
+	#{username},#{password},
+	#{salt},#{isDelete},
+	#{phone},#{email},
+	#{gender},#{avatar},
+	#{createdUser},#{createdTime},
+	#{modifiedUser},#{modifiedTime}
+	);
+	
+	</insert>
+	
+	<!-- 更新用户信息 -->
+	<!-- Integer updateInfo(User user) -->
+	<update id="updateInfo">
+	UPDATE
+	t_user
+	SET
+	phone=#{phone},
+	gender=#{gender},
+	email=#{email},
+	modified_user=#{modifiedUser},
+	modified_time=#{modifiedTime}
+	WHERE
+	uid=#{uid}
+	</update>
+	
+	
+	<update id="updatePassword" >
+	UPDATE
+	t_user
+	SET
+	password=#{password},
+	modified_user=#{modifiedUser},
+	modified_time=#{modifiedTime}
+	WHERE
+	uid=#{uid}
+	</update>
+
+
+	<!-- 注册之前查下之前是否已经有用户名 -->
+	<!-- User findByUsername(String username); -->
+   <select id="findByUsername" resultType="cn.tedu.stored.Entity.User">
+   SELECT
+	   	uid,
+	    username,password,
+	    salt,is_delete as isDelete,
+	    phone,email,
+	    gender,avatar
+   	FROM
+   		t_user
+   	WHERE
+   	username=#{username}
+   
+   </select>
+   
+    <select id="findByUid" resultMap="UserEntityMap">
+   SELECT
+	   	
+	    username,password,
+	    salt,is_delete,
+	    phone,email,
+	    gender,avatar
+   	FROM
+   		t_user
+   	WHERE
+   	uid=#{uid}
+   
+   </select>
+   
+   
+   
+   
+   
+   
+</mapper>
+
+
+
+
+
+
